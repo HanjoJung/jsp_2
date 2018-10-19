@@ -102,4 +102,16 @@ public class NoticeDAO {
 		DBConnector.disConnect(rs, st, con);
 		return dto;
 	}
+	
+	public void noticeHitUp(NoticeDTO dto) throws Exception {
+		Connection con = DBConnector.getConnect();
+		String sql = "update notice set hit=? where num=?";
+		
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, dto.getHit()+1);
+		st.setInt(2, dto.getNum());
+		st.executeUpdate();
+		
+		DBConnector.disConnect(st, con);
+	}
 }

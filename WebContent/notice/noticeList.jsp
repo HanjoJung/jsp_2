@@ -247,18 +247,16 @@ footer .glyphicon {
 		<div class="row">
 				<table class="table table-bordered table-hover">
 					<tr>
-						<td>번호</td>
-						<td>제목</td>
-						<td>내용</td>
-						<td>작성자</td>
-						<td>작성날짜</td>
-						<td>조회수</td>
+						<td style="width: 10%">번호</td>
+						<td style="width: 50%">제목</td>
+						<td style="width: 15%">작성자</td>
+						<td style="width: 15%">작성날짜</td>
+						<td style="width: 10%">조회수</td>
 					</tr>
 					<%for (int i = 0; i < ar.size(); i++) {	%>
 					<tr>
 						<td><%=ar.get(i).getNum() %></td>
 						<td><a href="./noticeSelectProcess.jsp?num=<%=ar.get(i).getNum()%>"><%=ar.get(i).getTitle() %></a></td>
-						<td><%=ar.get(i).getContents() %></td>
 						<td><%=ar.get(i).getWriter() %></td>
 						<td><%=ar.get(i).getReg_date() %></td>
 						<td><%=ar.get(i).getHit() %></td>
