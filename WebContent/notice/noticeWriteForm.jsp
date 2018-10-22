@@ -238,22 +238,35 @@ footer .glyphicon {
 
 
 	<div class="container-fluid">
-		<div class="row">
+		<div class="row" align="center">
 			<form action="noticeWriteProcess.jsp">
-				<p>
-					제목 : <input type="text" name="title">
-				</p>
-				<p>
-					내용 : <input type="text" name="contents">
-				</p>
-				<p>
-					작성자 : <input type="text" name="writer">
-				</p>
+				<table class="table table-bordered table-hover"
+					style="max-width: 1500px">
+					<tr>
+						<td style="width: 10%">번호</td>
+						<td style="width: 50%">제목</td>
+						<td style="width: 15%">작성자</td>
+						<td style="width: 15%">작성날짜</td>
+						<td style="width: 10%">조회수</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input type="text" name="title"></td>
+						<td><input type="text" name="writer"></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="5" align="center">내용</td>
+					</tr>
+					<tr>
+						<td colspan="5" align="center" style="height: 500px;">
+						<input type="text" name="contents" style="height: 100%; width: 100%"></td>
+					</tr>
+				</table>
 				<button>등록</button>
-				<!-- <input type="button" value="등록 " id="btn"> -->
 			</form>
 		</div>
 	</div>
-
 </body>
 </html>

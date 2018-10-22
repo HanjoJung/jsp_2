@@ -13,7 +13,7 @@ public class NoticeDAO {
 	// insert
 	public int insert(NoticeDTO dto) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql = "insert into notice values(NOTICE_NUM.nextval,?,?,?,SYSTIMESTAMP,?)";
+		String sql = "insert into notice values(notice_seq.nextval,?,?,?,sysdate,?)";
 
 		PreparedStatement st = con.prepareStatement(sql);
 		st.setString(1, dto.getTitle());
@@ -63,7 +63,7 @@ public class NoticeDAO {
 	public List<NoticeDTO> selectList() throws Exception {
 		Connection con = DBConnector.getConnect();
 		List<NoticeDTO> ar = new ArrayList<>();
-		String sql = "select * from notice order by reg_date asc";
+		String sql = "select * from notice order by num desc";
 
 		PreparedStatement st = con.prepareStatement(sql);
 		ResultSet rs = st.executeQuery();
