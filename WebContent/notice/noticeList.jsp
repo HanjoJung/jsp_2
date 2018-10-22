@@ -5,7 +5,41 @@
 	pageEncoding="UTF-8"%>
 <%
 	NoticeDAO dao = new NoticeDAO();
- 	List<NoticeDTO> ar = dao.selectList();
+	int curPage = 1;
+	try {
+		curPage = Integer.parseInt(request.getParameter("curPage"));
+	} catch (Exception e) {
+	}
+	int perPage = 10;
+	int startRow = (curPage - 1) * perPage + 1;
+	int lastRow = curPage * perPage;
+	List<NoticeDTO> ar = dao.selectList(startRow, lastRow);
+
+	//페이징
+	//1. 전체 글의 갯수
+	int totalCount = dao.getCount();
+	//2. 전체 페이지의 갯수
+	int totalPage = totalCount / perPage;
+	if (totalCount % perPage != 0) {
+		totalPage++;
+	}
+	//3. 전체 블럭의 갯수
+	int perBlock = 5; //블럭당 숫자의 갯수
+	int totalBlock = totalPage / perBlock;
+	if (totalPage % perBlock != 0) {
+		totalBlock++;
+	}
+	//4. curPage의 번호로 curBlock 구하기
+	int curBlock = (curPage / perBlock);
+	if (curPage % perBlock != 0) {
+		curBlock = (curPage / perBlock) + 1;
+	}
+	//5. curBlock 번호로 startNum, lastNum 구하기
+	int startNum = (curBlock - 1) * perBlock + 1;
+	int lastNum = curBlock * perBlock;
+	if(curBlock == totalBlock){
+		lastNum = totalPage;
+	}
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -216,6 +250,11 @@ footer .glyphicon {
 	}
 }
 </style>
+<script type="text/javascript">
+	$(function() {
+		$("")
+	})
+</script>
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar"
 	data-offset="60">
@@ -241,29 +280,53 @@ footer .glyphicon {
 			</div>
 		</div>
 	</nav>
-	
+
 
 	<div class="container-fluid">
-		<div class="row">
-				<table class="table table-bordered table-hover">
-					<tr>
-						<td style="width: 10%">번호</td>
-						<td style="width: 50%">제목</td>
-						<td style="width: 15%">작성자</td>
-						<td style="width: 15%">작성날짜</td>
-						<td style="width: 10%">조회수</td>
-					</tr>
-					<%for (NoticeDTO noticeDTO:ar) {	%>
-					<tr>
-						<td><%=noticeDTO.getNum() %></td>
-						<td><a href="./noticeSelectProcess.jsp?num=<%=noticeDTO.getNum()%>"><%=noticeDTO.getTitle() %></a></td>
-						<td><%=noticeDTO.getWriter() %></td>
-						<td><%=noticeDTO.getReg_date() %></td>
-						<td><%=noticeDTO.getHit() %></td>
-					</tr>
-					<%} %>
-				</table>
-	<a href="./noticeWriteForm.jsp"><button>등록</button></a>
+		<div class="row" align="center">
+			<table class="table table-bordered table-hover">
+				<tr>
+					<td style="width: 10%">번호</td>
+					<td style="width: 50%">제목</td>
+					<td style="width: 15%">작성자</td>
+					<td style="width: 15%">작성날짜</td>
+					<td style="width: 10%">조회수</td>
+				</tr>
+				<%
+					for (NoticeDTO noticeDTO : ar) {
+				%>
+				<tr>
+					<td><%=noticeDTO.getNum()%></td>
+					<td><a
+						href="./noticeSelectProcess.jsp?num=<%=noticeDTO.getNum()%>">
+							<%=noticeDTO.getTitle()%></a></td>
+					<td><%=noticeDTO.getWriter()%></td>
+					<td><%=noticeDTO.getReg_date()%></td>
+					<td><%=noticeDTO.getHit()%></td>
+				</tr>
+				<%
+					}
+				%>
+			</table>
+			<a href="./noticeWriteForm.jsp" style="float: right;"><button>등록</button></a>
+			<ul class="pagination pagination-sm">
+			<%if(curBlock > 1){ %>
+				<li><a href="./noticeList.jsp?curPage=<%=1%>"><span class="	glyphicon glyphicon-step-backward"></span></a></li>
+				<li><a href="./noticeList.jsp?curPage=<%=startNum-1%>"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+				<%}
+					for (int i = startNum; i <= lastNum; i++) {
+						if(curPage == i){
+				%>	
+						<li class="active"><a href="./noticeList.jsp?curPage=<%=i%>"><%=i%></a></li>
+						<%}else{ %>
+						<li><a href="./noticeList.jsp?curPage=<%=i%>"><%=i%></a></li>
+				<%
+					}}
+				if(curBlock < totalBlock){%>
+				<li><a href="./noticeList.jsp?curPage=<%=lastNum+1%>"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+				<li><a href="./noticeList.jsp?curPage=<%=totalPage%>"><span class="glyphicon glyphicon-step-forward"></span></a></li>
+			<%} %>
+			</ul>
 		</div>
 	</div>
 

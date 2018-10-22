@@ -10,6 +10,19 @@ import com.jhj.util.DBConnector;
 
 public class NoticeDAO {
 
+	public int getCount() throws Exception {
+		Connection con = DBConnector.getConnect();
+		String sql = "select count(num) from notice";
+
+		PreparedStatement st = con.prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		rs.next();
+		int result = rs.getInt(1);
+
+		DBConnector.disConnect(rs, st, con);
+		return result;
+	}
+
 	// insert
 	public int insert(NoticeDTO dto) throws Exception {
 		Connection con = DBConnector.getConnect();
@@ -40,6 +53,7 @@ public class NoticeDAO {
 
 		return result;
 	}
+
 	// update
 	public int updete(NoticeDTO dto) throws Exception {
 		Connection con = DBConnector.getConnect();
@@ -60,12 +74,17 @@ public class NoticeDAO {
 
 	// select
 
-	public List<NoticeDTO> selectList() throws Exception {
+	public List<NoticeDTO> selectList(int startRow, int lastRow) throws Exception {
 		Connection con = DBConnector.getConnect();
 		List<NoticeDTO> ar = new ArrayList<>();
-		String sql = "select * from notice order by num desc";
+		String sql = "select * from "
+				+ "(select rownum R, N.* from "
+				+ "(select * from notice order by num desc) N) "
+				+ "where R between ? and ?";
 
 		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, startRow);
+		st.setInt(2, lastRow);
 		ResultSet rs = st.executeQuery();
 		while (rs.next()) {
 			NoticeDTO dto = new NoticeDTO();
@@ -102,16 +121,16 @@ public class NoticeDAO {
 		DBConnector.disConnect(rs, st, con);
 		return dto;
 	}
-	
+
 	public void noticeHitUp(NoticeDTO dto) throws Exception {
 		Connection con = DBConnector.getConnect();
 		String sql = "update notice set hit=? where num=?";
-		
+
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setInt(1, dto.getHit()+1);
+		st.setInt(1, dto.getHit() + 1);
 		st.setInt(2, dto.getNum());
 		st.executeUpdate();
-		
+
 		DBConnector.disConnect(st, con);
 	}
 }
