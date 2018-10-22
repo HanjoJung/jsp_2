@@ -253,13 +253,13 @@ footer .glyphicon {
 						<td style="width: 15%">작성날짜</td>
 						<td style="width: 10%">조회수</td>
 					</tr>
-					<%for (int i = 0; i < ar.size(); i++) {	%>
+					<%for (NoticeDTO noticeDTO:ar) {	%>
 					<tr>
-						<td><%=ar.get(i).getNum() %></td>
-						<td><a href="./noticeSelectProcess.jsp?num=<%=ar.get(i).getNum()%>"><%=ar.get(i).getTitle() %></a></td>
-						<td><%=ar.get(i).getWriter() %></td>
-						<td><%=ar.get(i).getReg_date() %></td>
-						<td><%=ar.get(i).getHit() %></td>
+						<td><%=noticeDTO.getNum() %></td>
+						<td><a href="./noticeSelectProcess.jsp?num=<%=noticeDTO.getNum()%>"><%=noticeDTO.getTitle() %></a></td>
+						<td><%=noticeDTO.getWriter() %></td>
+						<td><%=noticeDTO.getReg_date() %></td>
+						<td><%=noticeDTO.getHit() %></td>
 					</tr>
 					<%} %>
 				</table>

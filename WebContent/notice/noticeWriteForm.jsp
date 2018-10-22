@@ -238,33 +238,24 @@ footer .glyphicon {
 
 
 	<div class="container-fluid">
-		<div class="row" align="center">
-			<form action="noticeWriteProcess.jsp">
-				<table class="table table-bordered table-hover"
-					style="max-width: 1500px">
-					<tr>
-						<td style="width: 10%">번호</td>
-						<td style="width: 50%">제목</td>
-						<td style="width: 15%">작성자</td>
-						<td style="width: 15%">작성날짜</td>
-						<td style="width: 10%">조회수</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td><input type="text" name="title"></td>
-						<td><input type="text" name="writer"></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td colspan="5" align="center">내용</td>
-					</tr>
-					<tr>
-						<td colspan="5" align="center" style="height: 500px;">
-						<input type="text" name="contents" style="height: 100%; width: 100%"></td>
-					</tr>
-				</table>
-				<button>등록</button>
+		<div class="row">
+			<form action="noticeWriteProcess.jsp" method="post">
+				<div class="form-group">
+					<label for="title">제목:</label> <input type="text"
+						class="form-control" id="title" placeholder="Enter title"
+						name="title">
+				</div>
+				<div class="form-group">
+					<label for="contents">작성자:</label> <input type="text"
+						class="form-control" id="writer" placeholder="Enter writer"
+						name="writer">
+				</div>
+				<div class="form-group">
+					<label for="contents">내용:</label>
+					<textarea rows="10" cols="3" class="form-control" id="contents"
+						placeholder="Enter contents" name="contents"></textarea>
+				</div>
+				<button type="submit" class="btn btn-default">등록</button>
 			</form>
 		</div>
 	</div>
