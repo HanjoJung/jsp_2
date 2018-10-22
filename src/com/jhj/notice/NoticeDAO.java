@@ -10,11 +10,12 @@ import com.jhj.util.DBConnector;
 
 public class NoticeDAO {
 
-	public int getCount() throws Exception {
+	public int getCount(String kind, String search) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql = "select count(num) from notice";
+		String sql = "select count(num) from notice where "+ kind +" like ?";
 
 		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, "%"+search+"%");
 		ResultSet rs = st.executeQuery();
 		rs.next();
 		int result = rs.getInt(1);
@@ -74,17 +75,16 @@ public class NoticeDAO {
 
 	// select
 
-	public List<NoticeDTO> selectList(int startRow, int lastRow) throws Exception {
+	public List<NoticeDTO> selectList(int startRow, int lastRow, String kind, String search) throws Exception {
 		Connection con = DBConnector.getConnect();
 		List<NoticeDTO> ar = new ArrayList<>();
-		String sql = "select * from "
-				+ "(select rownum R, N.* from "
-				+ "(select * from notice order by num desc) N) "
-				+ "where R between ? and ?";
+		String sql = "select * from " + "(select rownum R, N.* from " + "(select * from notice " + "where " + kind
+				+ " like ? order by num desc) N) " + "where R between ? and ?";
 
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setInt(1, startRow);
-		st.setInt(2, lastRow);
+		st.setString(1, "%" + search + "%");
+		st.setInt(2, startRow);
+		st.setInt(3, lastRow);
 		ResultSet rs = st.executeQuery();
 		while (rs.next()) {
 			NoticeDTO dto = new NoticeDTO();
