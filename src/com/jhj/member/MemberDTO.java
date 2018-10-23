@@ -1,6 +1,7 @@
 package com.jhj.member;
 
 public class MemberDTO {
+	private int num;
 	private String id; 
 	private String pw;
 	private String name;
@@ -9,6 +10,12 @@ public class MemberDTO {
 	private String classMate;
 	private int grade;
 	private int ban;
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
+	}
 	public int getGrade() {
 		return grade;
 	}

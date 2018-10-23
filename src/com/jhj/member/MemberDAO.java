@@ -22,16 +22,22 @@ public class MemberDAO {
 		return result;
 	}
 	//select
-	public List<MemberDTO> selectList() throws Exception{
+	public List<MemberDTO> selectList(int startPage, int lastPage) throws Exception{
 		Connection con = DBConnector.getConnect();
 		List<MemberDTO> ar = new ArrayList<>();
-		String sql = "select id, pw, name, email, kind, m.classMate, grade, ban from member m " + 
-				"LEFT JOIN team t on (m.classmate = t.classmate) ORDER by t.grade, t.ban, m.id";
+		String sql = "select * from "
+				+ "(select rownum R, N.* from "
+				+ "(select id, pw, name, email, kind, m.classMate, grade, ban from member m " + 
+				"LEFT JOIN team t on (m.classmate = t.classmate) ORDER by t.grade, t.ban, m.id) N) "
+				+ "where R between ? and ?";
 		
 		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, startPage);
+		st.setInt(2, lastPage);
 		ResultSet rs = st.executeQuery();
 		while(rs.next()) {
 			MemberDTO dto = new MemberDTO();
+			
 			dto.setId(rs.getString("id"));
 			dto.setPw(rs.getString("pw"));
 			dto.setName(rs.getString("name"));

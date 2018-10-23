@@ -38,7 +38,7 @@
 		totalBlock++;
 	}
 	//4. curPage의 번호로 curBlock 구하기
-	int curBlock = (curPage / perBlock);
+	int curBlock = curPage / perBlock;
 	if (curPage % perBlock != 0) {
 		curBlock = (curPage / perBlock) + 1;
 	}
