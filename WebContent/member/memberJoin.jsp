@@ -213,7 +213,10 @@ footer .glyphicon {
 <script type="text/javascript">
 	$(function() {
 		$("#btn").click(function() {
-			window.open();
+			window.open("./memberJoinIDForm.jsp", "myWindow", "width=300, height=200");
+		})
+		$('#joinBtn').click(function() {
+			dcument.submit();
 		})
 	})
 </script>
@@ -281,7 +284,8 @@ footer .glyphicon {
 					3학년<input type="radio" name="grade" value="3">  
 					3반<input type="radio" name="class" value="3"><br>
 				</div>
-				<button class="btn btn-default">가입</button>
+				<input id="joinBtn" type="button" class="btn btn-danger" value="가입">
+				<button>가입</button>
 			</form>
 		</div>
 	</div>

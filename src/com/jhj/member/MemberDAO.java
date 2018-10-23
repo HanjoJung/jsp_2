@@ -8,7 +8,21 @@ import java.util.List;
 
 import com.jhj.util.DBConnector;
 
+
 public class MemberDAO {
+	public int idSearch() throws Exception{
+		Connection con = DBConnector.getConnect();
+		String sql = "select * from where id = '%q%'";
+		
+		PreparedStatement st = con.prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		rs.next();
+		int result = rs.getInt(1);
+		
+		DBConnector.disConnect(rs, st, con);
+		return result;
+	}
+	
 	public int getCount(String kind, String search) throws Exception {
 		Connection con = DBConnector.getConnect();
 		String sql = "select count(id) from member where "+kind+" like ?";
