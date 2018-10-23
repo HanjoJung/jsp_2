@@ -1,54 +1,24 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
-<%@page import="com.jhj.notice.NoticeDTO"%>
-<%@page import="com.jhj.notice.NoticeDAO"%>
+<%@page import="com.jhj.member.MemberDTO"%>
+<%@page import="com.jhj.member.MemberDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-	NoticeDAO dao = new NoticeDAO();
+	<%
+	MemberDAO memberDAO = new MemberDAO();
+	
 	int curPage = 1;
-	String kind = request.getParameter("kind");
-	String search = request.getParameter("search");
-	if (kind == null) {
-		kind = "title";
-	}
-	if (search == null) {
-		search = "";
-	}
-	try {
-		curPage = Integer.parseInt(request.getParameter("curPage"));
-	} catch (Exception e) {
-	}
+	try{
+	curPage = Integer.parseInt(request.getParameter("curPage"));
+	}catch(Exception e){}
 	int perPage = 10;
-	int startRow = (curPage - 1) * perPage + 1;
-	int lastRow = curPage * perPage;
-	List<NoticeDTO> ar = dao.selectList(startRow, lastRow, kind, search);
-
-	//페이징
-	//1. 전체 글의 갯수
-	int totalCount = dao.getCount(kind, search);
-	//2. 전체 페이지의 갯수
-	int totalPage = totalCount / perPage;
-	if (totalCount % perPage != 0) {
-		totalPage++;
-	}
-	//3. 전체 블럭의 갯수
-	int perBlock = 5; //블럭당 숫자의 갯수
-	int totalBlock = totalPage / perBlock;
-	if (totalPage % perBlock != 0) {
-		totalBlock++;
-	}
-	//4. curPage의 번호로 curBlock 구하기
-	int curBlock = (curPage / perBlock);
-	if (curPage % perBlock != 0) {
-		curBlock = (curPage / perBlock) + 1;
-	}
-	//5. curBlock 번호로 startNum, lastNum 구하기
-	int startNum = (curBlock - 1) * perBlock + 1;
-	int lastNum = curBlock * perBlock;
-	if (curBlock == totalBlock) {
-		lastNum = totalPage;
-	}
-%>
+	int startPage = (curPage-1)*perPage +1;
+	int lastPage = curPage*perPage;
+	List<MemberDTO> ar = memberDAO.selectList(startPage, lastPage);
+	
+	
+	int totalCount = memberDAO.getCount();
+	%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -258,11 +228,6 @@ footer .glyphicon {
 	}
 }
 </style>
-<script type="text/javascript">
-	$(function() {
-		$("")
-	})
-</script>
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar"
 	data-offset="60">
@@ -289,34 +254,39 @@ footer .glyphicon {
 		</div>
 	</nav>
 
+
 	<div class="container-fluid">
 
 		<div class="row" align="center">
 			<table class="table table-bordered table-hover">
 				<tr>
-					<td style="width: 10%">번호</td>
-					<td style="width: 50%">제목</td>
-					<td style="width: 15%">작성자</td>
-					<td style="width: 15%">작성날짜</td>
-					<td style="width: 10%">조회수</td>
+					<td style="width: 20%">Id</td>
+					<td style="width: 20%">Name</td>
+					<td style="width: 25%">Email</td>
+					<td style="width: 5%">Kind</td>
+					<td style="width: 10%">Grade</td>
+					<td style="width: 10%">Class</td>
 				</tr>
 				<%
-					for (NoticeDTO noticeDTO : ar) {
+					for (MemberDTO memberDTO : ar) {
 				%>
 				<tr>
-					<td><%=noticeDTO.getNum()%></td>
-					<td><a
-						href="./noticeSelectProcess.jsp?num=<%=noticeDTO.getNum()%>">
-							<%=noticeDTO.getTitle()%></a></td>
-					<td><%=noticeDTO.getWriter()%></td>
-					<td><%=noticeDTO.getReg_date()%></td>
-					<td><%=noticeDTO.getHit()%></td>
+					<td><%=memberDTO.getId()%></td>
+					<td><a>
+							<%=memberDTO.getName()%></a></td>
+					<td><%=memberDTO.getEmail()%></td>
+					<%if(memberDTO.getKind().equals("T")) {%>
+					<td>선생님</td>
+					<%}else{ %>
+					<td>학생</td>
+					<%} %>
+					<td><%=memberDTO.getGrade()%></td>
+					<td><%=memberDTO.getBan()%></td>
 				</tr>
 				<%
 					}
 				%>
 			</table>
-
 
 			<a href="./noticeWriteForm.jsp"
 				style="float: left; margin-right: 10px;"><button>등록</button></a>
@@ -371,7 +341,7 @@ footer .glyphicon {
 				</div>
 				<button type="submit" class="btn btn-default">Submit</button>
 			</form>
-		</div>
+		</div> 
 	</div>
 </body>
 </html>

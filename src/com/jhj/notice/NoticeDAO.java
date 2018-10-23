@@ -109,7 +109,7 @@ public class NoticeDAO {
 		st.setInt(1, num);
 		ResultSet rs = st.executeQuery();
 		NoticeDTO dto = new NoticeDTO();
-		while (rs.next()) {
+		if (rs.next()) {
 			dto.setNum(rs.getInt("num"));
 			dto.setTitle(rs.getString("title"));
 			dto.setContents(rs.getString("contents"));
