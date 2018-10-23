@@ -12,10 +12,10 @@ public class NoticeDAO {
 
 	public int getCount(String kind, String search) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql = "select count(num) from notice where "+ kind +" like ?";
+		String sql = "select count(num) from notice where " + kind + " like ?";
 
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setString(1, "%"+search+"%");
+		st.setString(1, "%" + search + "%");
 		ResultSet rs = st.executeQuery();
 		rs.next();
 		int result = rs.getInt(1);
@@ -78,7 +78,8 @@ public class NoticeDAO {
 	public List<NoticeDTO> selectList(int startRow, int lastRow, String kind, String search) throws Exception {
 		Connection con = DBConnector.getConnect();
 		List<NoticeDTO> ar = new ArrayList<>();
-		String sql = "select * from " + "(select rownum R, N.* from " + "(select * from notice " + "where " + kind
+		String sql = "select * from " + "(select rownum R, N.* from "
+		+ "(select * from notice " + "where " + kind
 				+ " like ? order by num desc) N) " + "where R between ? and ?";
 
 		PreparedStatement st = con.prepareStatement(sql);

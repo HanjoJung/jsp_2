@@ -12,35 +12,41 @@
 		curPage = Integer.parseInt(request.getParameter("curPage"));
 	} catch (Exception e) {
 	}
-	String kind = "";
-	String search = "";
+	String kind = request.getParameter("kind");
+	String search = request.getParameter("search");
+	if (kind == null) {
+		kind = "id";
+	}
+	if (search == null) {
+		search = "";
+	}
 	int perPage = 10;
 	int startPage = (curPage - 1) * perPage + 1;
 	int lastPage = curPage * perPage;
-	List<MemberDTO> ar = memberDAO.selectList(startPage, lastPage);
+	List<MemberDTO> ar = memberDAO.selectList(startPage, lastPage, kind, search);
 
-	//전체 글의 갯수
-	int totalCount = memberDAO.getCount();
-	//전체 페이지 수
+	//1.전체 글의 갯수
+	int totalCount = memberDAO.getCount(kind, search);
+	//2.전체 페이지 수
 	int totalPage = totalCount / perPage;
 	if (totalCount % perPage != 0) {
 		totalPage++;
 	}
 
-	//전체 블럭의 수
+	//3.전체 블럭의 수
 	int perBlock = 10;
 	int totalBlock = totalPage / perBlock;
 	if (totalPage % perBlock != 0) {
 		totalBlock++;
 	}
 
-	//현재 페이지로 현재 블럭 찾기
+	//4.현재 페이지로 현재 블럭 찾기
 	int curBlock = curPage / perBlock;
 	if (curPage % perBlock != 0) {
 		curBlock++;
 	}
 
-	//블럭 출력 시작과 끝지점 찾기
+	//5.블럭 출력 시작과 끝지점 찾기
 	int startNum = (curBlock - 1) * perBlock + 1;
 	int lastNum = curBlock * perBlock;
 	if (curBlock == totalBlock) {
@@ -288,17 +294,19 @@ footer .glyphicon {
 		<div class="row" align="center">
 			<table class="table table-bordered table-hover">
 				<tr>
-					<td style="width: 20%">Id</td>
-					<td style="width: 20%">Name</td>
-					<td style="width: 25%">Email</td>
-					<td style="width: 5%">Kind</td>
-					<td style="width: 10%">Grade</td>
-					<td style="width: 10%">Class</td>
+					<td style="width: 5%"></td>
+					<td style="width: 20%">ID</td>
+					<td style="width: 15%">이름</td>
+					<td style="width: 25%">이메일</td>
+					<td style="width: 15%">직업</td>
+					<td style="width: 10%">학년</td>
+					<td style="width: 10%">반</td>
 				</tr>
 				<%
 					for (MemberDTO memberDTO : ar) {
 				%>
 				<tr>
+					<td><%=memberDTO.getNum()%></td>
 					<td><%=memberDTO.getId()%></td>
 					<td><a> <%=memberDTO.getName()%></a></td>
 					<td><%=memberDTO.getEmail()%></td>
@@ -321,8 +329,8 @@ footer .glyphicon {
 				%>
 			</table>
 
-			<a href="./memberWriteForm.jsp"
-				style="float: left; margin-right: 10px;"><button>등록</button></a>
+			<a href="./memberJoin.jsp"
+				style="float: left; margin-right: 10px;"><button>회원가입</button></a>
 			<ul class="pagination" style="float: left; margin: 0;">
 				<%
 					if (curBlock > 1) {
@@ -366,9 +374,11 @@ footer .glyphicon {
 				<div class="form-group">
 					<select class="form-control" id="sel1"
 						style="display: inline-block;" name="kind">
-						<option>title</option>
-						<option>contents</option>
-						<option>writer</option>
+						<option value="id">아이디</option>
+						<option value="name">이름</option>
+						<option value="email">E-mail</option>
+						<option value="kind">직종</option>
+						<option value="classmate">학년</option>
 					</select> <input type="text" class="form-control" id="search"
 						placeholder="Enter search" name="search">
 				</div>
