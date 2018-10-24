@@ -1,3 +1,4 @@
+<%@page import="com.jhj.member.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -236,7 +237,9 @@ footer .glyphicon {
 	</nav>
 
 
-
+	<%
+		MemberDTO memberDTO = (MemberDTO) session.getAttribute("member");
+	%>
 	<div class="container-fluid">
 		<div class="row">
 			<form action="noticeWriteProcess.jsp" method="post">
@@ -247,8 +250,8 @@ footer .glyphicon {
 				</div>
 				<div class="form-group">
 					<label for="contents">작성자:</label> <input type="text"
-						class="form-control" id="writer" placeholder="Enter writer"
-						name="writer">
+						class="form-control" id="writer" name="writer"
+						value="<%=memberDTO.getId()%>" readonly="readonly">
 				</div>
 				<div class="form-group">
 					<label for="contents">내용:</label>

@@ -8,27 +8,26 @@ import java.util.List;
 
 import com.jhj.util.DBConnector;
 
-
 public class MemberDAO {
-	public int idSearch() throws Exception{
+	public int idSearch() throws Exception {
 		Connection con = DBConnector.getConnect();
 		String sql = "select * from where id = '%q%'";
-		
+
 		PreparedStatement st = con.prepareStatement(sql);
 		ResultSet rs = st.executeQuery();
 		rs.next();
 		int result = rs.getInt(1);
-		
+
 		DBConnector.disConnect(rs, st, con);
 		return result;
 	}
-	
+
 	public int getCount(String kind, String search) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql = "select count(id) from member where "+kind+" like ?";
+		String sql = "select count(id) from member where " + kind + " like ?";
 
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setString(1, "%"+search+"%");
+		st.setString(1, "%" + search + "%");
 		ResultSet rs = st.executeQuery();
 		rs.next();
 		int result = rs.getInt(1);
@@ -41,12 +40,10 @@ public class MemberDAO {
 	public List<MemberDTO> selectList(int startPage, int lastPage, String kind, String search) throws Exception {
 		Connection con = DBConnector.getConnect();
 		List<MemberDTO> ar = new ArrayList<>();
-		String sql = "select * from "
-				+ "(select rownum R, N.* from "
+		String sql = "select * from " + "(select rownum R, N.* from "
 				+ "(select id, pw, name, email, kind, m.classMate, grade, ban from member m "
-				+ "LEFT JOIN team t on (m.classmate = t.classmate) "
-				+ "where " + kind + " like ? order by t.grade, t.ban, m.id) N) "
-				+ "where R between ? and ?";
+				+ "LEFT JOIN team t on (m.classmate = t.classmate) " + "where " + kind
+				+ " like ? order by t.grade, t.ban, m.id) N) " + "where R between ? and ?";
 
 		PreparedStatement st = con.prepareStatement(sql);
 		st.setString(1, "%" + search + "%");
@@ -72,27 +69,29 @@ public class MemberDAO {
 	}
 
 	// select
-	public MemberDTO selectOne() throws Exception {
+	public MemberDTO selectOne(MemberDTO dto) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql = "select id, pw, name, email, kind, m.classMate, grade, ban from member m "
-				+ "LEFT JOIN team t on (m.classmate = t.classmate) ORDER by t.grade, t.ban, m.id where id=?";
-
+		String sql = "select * from member m LEFT JOIN team t on (m.classmate = t.classmate) where id=? and pw=?";
 		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, dto.getId());
+		st.setString(2, dto.getPw());
+
 		ResultSet rs = st.executeQuery();
-		MemberDTO dto = new MemberDTO();
+		MemberDTO mDto = null;
 		if (rs.next()) {
-			dto.setId(rs.getString("id"));
-			dto.setPw(rs.getString("pw"));
-			dto.setName(rs.getString("name"));
-			dto.setEmail(rs.getString("email"));
-			dto.setKind(rs.getString("kind"));
-			dto.setClassMate(rs.getString("classmate"));
-			dto.setGrade(rs.getInt("grade"));
-			dto.setBan(rs.getInt("ban"));
+			mDto = new MemberDTO();
+			mDto.setId(rs.getString("id"));
+			mDto.setPw(rs.getString("pw"));
+			mDto.setName(rs.getString("name"));
+			mDto.setEmail(rs.getString("email"));
+			mDto.setKind(rs.getString("kind"));
+			mDto.setClassMate(rs.getString("classmate"));
+			mDto.setGrade(rs.getInt("grade"));
+			mDto.setBan(rs.getInt("ban"));
 		}
 
 		DBConnector.disConnect(rs, st, con);
-		return dto;
+		return mDto;
 	}
 
 	// insert
@@ -112,6 +111,34 @@ public class MemberDAO {
 		DBConnector.disConnect(st, con);
 		return result;
 	}
+
 	// delete
+	public int delete(String id) throws Exception {
+		Connection con = DBConnector.getConnect();
+		String sql = "delete member where id =?";
+
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, id);
+		int result = st.executeUpdate();
+		
+		DBConnector.disConnect(st, con);
+		return result;
+	}
+
 	// update
+	public int update(MemberDTO dto) throws Exception {
+		Connection con = DBConnector.getConnect();
+		String sql = "update member set pw=?, name=?, email=? where id=?";
+		
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, dto.getPw());
+		st.setString(2, dto.getName());
+		st.setString(3, dto.getEmail());
+		st.setString(4, dto.getId());
+		int result = st.executeUpdate();
+		
+		DBConnector.disConnect(st, con);
+		return result;
+	}
+
 }

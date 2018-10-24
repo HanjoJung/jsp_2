@@ -285,7 +285,7 @@ footer .glyphicon {
 					3반<input type="radio" name="class" value="3"><br>
 				</div>
 				<input id="joinBtn" type="button" class="btn btn-danger" value="가입">
-				<button>가입</button>
+				<input id="Btn" type="submit" class="btn btn-danger" value="가입">
 			</form>
 		</div>
 	</div>

@@ -329,8 +329,7 @@ footer .glyphicon {
 				%>
 			</table>
 
-			<a href="./memberJoin.jsp"
-				style="float: left; margin-right: 10px;"><button>회원가입</button></a>
+			<a href="./memberJoin.jsp" style="float: left; margin-right: 10px;"><button>회원가입</button></a>
 			<ul class="pagination" style="float: left; margin: 0;">
 				<%
 					if (curBlock > 1) {
@@ -377,14 +376,31 @@ footer .glyphicon {
 						<option value="id">아이디</option>
 						<option value="name">이름</option>
 						<option value="email">E-mail</option>
-						<option value="kind">직종</option>
-						<option value="classmate">학년</option>
 					</select> <input type="text" class="form-control" id="search"
 						placeholder="Enter search" name="search">
 				</div>
 				<button type="submit" class="btn btn-default">Submit</button>
 			</form>
 		</div>
+
+		<%
+			MemberDTO dto = (MemberDTO) session.getAttribute("member");
+			if (dto == null) {
+		%>
+		<div id="row">
+			<a href="./memberJoin.jsp">Join</a> <a href="./memberLogin.jsp">Login</a>
+		</div>
+		<%
+			} else {
+		%>
+		<div id="row">
+			<h3><%=dto.getName()%>님 환영합니다
+			</h3>
+			<a href="./memberLogout.jsp">Logout</a> <a href="./memberMyPage.jsp">MyPage</a>
+		</div>
+		<%
+			}
+		%>
 	</div>
 </body>
 </html>

@@ -1,9 +1,11 @@
+<%@page import="com.jhj.member.MemberDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="com.jhj.notice.NoticeDTO"%>
 <%@page import="com.jhj.notice.NoticeDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+	MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
 	NoticeDAO dao = new NoticeDAO();
 	int curPage = 1;
 	String kind = request.getParameter("kind");
@@ -306,7 +308,7 @@ footer .glyphicon {
 				<tr>
 					<td><%=noticeDTO.getNum()%></td>
 					<td><a
-						href="./noticeSelectProcess.jsp?num=<%=noticeDTO.getNum()%>">
+						href="./noticeSelectProcess.jsp?num=<%=noticeDTO.getNum()%>&writer=<%=noticeDTO.getWriter()%>">
 							<%=noticeDTO.getTitle()%></a></td>
 					<td><%=noticeDTO.getWriter()%></td>
 					<td><%=noticeDTO.getReg_date()%></td>
@@ -317,9 +319,10 @@ footer .glyphicon {
 				%>
 			</table>
 
-
+			<%if(memberDTO != null && memberDTO.getKind().equals("T")){ %>
 			<a href="./noticeWriteForm.jsp"
 				style="float: left; margin-right: 10px;"><button>등록</button></a>
+				<%} %>
 			<ul class="pagination" style="float: left; margin: 0;">
 				<%
 					if (curBlock > 1) {
