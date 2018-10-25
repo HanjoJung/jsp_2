@@ -2,11 +2,13 @@
 <%@page import="com.jhj.notice.NoticeDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-	NoticeDTO dto = new NoticeDTO();
-	dto.setTitle(request.getParameter("title"));
-	dto.setContents(request.getParameter("contents"));
-	dto.setWriter(request.getParameter("writer"));
+	<jsp:useBean id="dto" class="com.jhj.notice.NoticeDTO" scope="page"></jsp:useBean>
+	<jsp:setProperty property="*" name="dto"/>
+	<%
+	//NoticeDTO dto = new NoticeDTO();
+	//dto.setTitle(request.getParameter("title"));
+	//dto.setContents(request.getParameter("contents"));
+	//dto.setWriter(request.getParameter("writer"));
 	NoticeDAO dao = new NoticeDAO();
 	int result = dao.insert(dto);
 	String str = "등록 완료";

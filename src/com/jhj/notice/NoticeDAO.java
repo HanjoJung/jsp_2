@@ -56,7 +56,7 @@ public class NoticeDAO {
 	}
 
 	// update
-	public int updete(NoticeDTO dto) throws Exception {
+	public int update(NoticeDTO dto) throws Exception {
 		Connection con = DBConnector.getConnect();
 		String sql = "update notice set title=?, contents=?, writer=?, hit=? where num=?";
 

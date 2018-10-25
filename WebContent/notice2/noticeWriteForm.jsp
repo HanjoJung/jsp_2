@@ -8,13 +8,12 @@
 <title>Bootstrap Theme Company Page</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<%@ include file="../../../../../../../temp/bootstrap.jsp" %>
+<jsp:include page="../temp/bootstrap.jsp"></jsp:include>
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar"
 	data-offset="60">
 
-<%@ include file="../../../../../../../temp/header.jsp" %>
-
+<jsp:include page="../temp/header.jsp"></jsp:include>
 
 	<%
 		MemberDTO memberDTO = (MemberDTO) session.getAttribute("member");
@@ -41,6 +40,6 @@
 			</form>
 		</div>
 	</div>
-<%@ include file="../../../../../../../temp/footer.jsp" %>
+	<jsp:include page="../temp/footer.jsp"></jsp:include>
 </body>
 </html>

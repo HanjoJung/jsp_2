@@ -8,23 +8,27 @@
 	NoticeDAO dao = new NoticeDAO();
 	NoticeDTO dto = dao.selectOne(num);
 	dao.noticeHitUp(dto);
+	request.setAttribute("noticeDTO", dto);
 %>
+<jsp:useBean id="noticeDTO" class="com.jhj.notice.NoticeDTO" scope="request"></jsp:useBean>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <!-- Theme Made By www.w3schools.com - No Copyright -->
 <title>Bootstrap Theme Company Page</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<%@ include file="../../../../../../../temp/bootstrap.jsp" %>
+<%@ include file="../temp/bootstrap.jsp"%>
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar"
 	data-offset="60">
 
-<%@ include file="../../../../../../../temp/header.jsp" %>
+	<%@ include file="../temp/header.jsp"%>
 
 	<div class="container-fluid">
 		<div class="row" align="center">
-			<table class="table table-bordered table-hover" style="max-width: 1500px">
+			<table class="table table-bordered table-hover"
+				style="max-width: 1500px">
 				<tr>
 					<td style="width: 10%">번호</td>
 					<td style="width: 50%">제목</td>
@@ -46,19 +50,28 @@
 					<td colspan="5" align="center"><%=dto.getContents()%></td>
 				</tr>
 			</table>
-			<% 	MemberDTO memberDTO = (MemberDTO)session.getAttribute("member"); 
+			<%
+				MemberDTO memberDTO = (MemberDTO) session.getAttribute("member");
 				String writer = request.getParameter("writer");
 			%>
-			<%if(memberDTO != null){ %>
-			<a href="./noticeWriteForm.jsp"><button>새글 작성</button></a> 
-			<%} %>
-			<%if(memberDTO != null && memberDTO.getId().equals(writer)){ %>
+			<%
+				if (memberDTO != null) {
+			%>
+			<a href="./noticeWriteForm.jsp"><button>새글 작성</button></a>
+			<%
+				}
+			%>
+			<%
+				if (memberDTO != null && memberDTO.getId().equals(writer)) {
+			%>
 			<a href="./noticeUpdateForm.jsp?num=<%=dto.getNum()%>"><button>수정</button></a>
 			<a href="./noticeDeleteProcess.jsp?num=<%=dto.getNum()%>"><button>삭제</button></a>
-			<%} %>
+			<%
+				}
+			%>
 		</div>
 	</div>
-<%@ include file="../../../../../../../temp/footer.jsp" %>
+
 
 </body>
 </html>

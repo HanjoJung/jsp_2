@@ -1,13 +1,13 @@
+<%@page import="com.jhj.qna.QnaDTO"%>
+<%@page import="com.jhj.qna.QnaDAO"%>
 <%@page import="com.jhj.member.MemberDTO"%>
-<%@page import="com.jhj.notice.NoticeDAO"%>
-<%@page import="com.jhj.notice.NoticeDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
 	int num = Integer.parseInt(request.getParameter("num"));
-	NoticeDAO dao = new NoticeDAO();
-	NoticeDTO dto = dao.selectOne(num);
-	dao.noticeHitUp(dto);
+	QnaDAO qnaDAO = new QnaDAO();
+	QnaDTO qnaDTO = qnaDAO.selectOne(num);
+	qnaDAO.qnaHitUp(qnaDTO);
 %>
 <html lang="en">
 <head>
@@ -33,29 +33,33 @@
 					<td style="width: 10%">조회수</td>
 				</tr>
 				<tr>
-					<td><%=dto.getNum()%></td>
-					<td><%=dto.getTitle()%></td>
-					<td><%=dto.getWriter()%></td>
-					<td><%=dto.getReg_date()%></td>
-					<td><%=dto.getHit()%></td>
+					<td><%=qnaDTO.getNum()%></td>
+					<td><%=qnaDTO.getTitle()%></td>
+					<td><%=qnaDTO.getWriter()%></td>
+					<td><%=qnaDTO.getReg_date()%></td>
+					<td><%=qnaDTO.getHit()%></td>
 				</tr>
 				<tr>
 					<td colspan="5" align="center">내용</td>
 				</tr>
 				<tr>
-					<td colspan="5" align="center"><%=dto.getContents()%></td>
+					<td colspan="5" align="center"><%=qnaDTO.getContents()%></td>
 				</tr>
 			</table>
 			<% 	MemberDTO memberDTO = (MemberDTO)session.getAttribute("member"); 
 				String writer = request.getParameter("writer");
 			%>
+			<a href="./qnaList.jsp"><button>목록으로</button></a> 
 			<%if(memberDTO != null){ %>
-			<a href="./noticeWriteForm.jsp"><button>새글 작성</button></a> 
 			<%} %>
-			<%if(memberDTO != null && memberDTO.getId().equals(writer)){ %>
-			<a href="./noticeUpdateForm.jsp?num=<%=dto.getNum()%>"><button>수정</button></a>
-			<a href="./noticeDeleteProcess.jsp?num=<%=dto.getNum()%>"><button>삭제</button></a>
+			<%if(memberDTO != null && qnaDTO.getWriter().equals(writer)){ %>
+			<a href="./qnaUpdate.jsp?num=<%=qnaDTO.getNum()%>"><button>수정</button></a>
+			<a href="./qnaDelete.jsp?num=<%=qnaDTO.getNum()%>"><button>삭제</button></a>
+			<a href="./qnaWriteForm.jsp?ref=<%=qnaDTO.getRef()%>&step=<%=qnaDTO.getStep()%>&depth=<%=qnaDTO.getDepth()%>">
+			<button>답글 작성</button></a> 
 			<%} %>
+			<a href="./qnaReplyForm.jsp?num=<%=qnaDTO.getNum()%>">
+			<button>답글 작성2</button></a> 
 		</div>
 	</div>
 <%@ include file="../../../../../../../temp/footer.jsp" %>

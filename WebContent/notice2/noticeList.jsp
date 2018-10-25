@@ -5,7 +5,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
 	NoticeDAO dao = new NoticeDAO();
 	int curPage = 1;
 	String kind = request.getParameter("kind");
@@ -58,21 +57,17 @@
 <title>Bootstrap Theme Company Page</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<%@ include file="../../../../../../../temp/bootstrap.jsp" %>
-<script type="text/javascript">
-	$(function() {
-		$("")
-	})
-</script>
+
+<jsp:include page="../temp/bootstrap.jsp"></jsp:include>
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar"
 	data-offset="60">
 
-<%@ include file="../../../../../../../temp/header.jsp" %>
-
+	<jsp:include page="../temp/header.jsp"></jsp:include>
+	
 	<div class="container-fluid">
-
 		<div class="row" align="center">
+			<h1>Notice List</h1>
 			<table class="table table-bordered table-hover">
 				<tr>
 					<td style="width: 10%">번호</td>
@@ -98,10 +93,8 @@
 				%>
 			</table>
 
-			<%if(memberDTO != null && memberDTO.getKind().equals("T")){ %>
 			<a href="./noticeWriteForm.jsp"
 				style="float: left; margin-right: 10px;"><button>등록</button></a>
-				<%} %>
 			<ul class="pagination" style="float: left; margin: 0;">
 				<%
 					if (curBlock > 1) {
@@ -155,6 +148,6 @@
 			</form>
 		</div>
 	</div>
-<%@ include file="../../../../../../../temp/footer.jsp" %>
+<%@ include file="../../../../../temp/footer.jsp" %>
 </body>
 </html>

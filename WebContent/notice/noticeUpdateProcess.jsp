@@ -12,7 +12,7 @@
 	dto.setWriter(request.getParameter("writer"));
 	dto.setHit(Integer.parseInt(request.getParameter("hit")));
 
-	int result = dao.updete(dto);
+	int result = dao.update(dto);
 	String str = "수정 완료";
 	if (result == 0) {
 		str = "수정 실패";
